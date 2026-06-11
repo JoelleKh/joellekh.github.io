@@ -130,9 +130,19 @@ section{padding:6rem 3rem;}
 .p-card:hover{transform:translateY(-4px);border-color:rgba(59,130,246,0.4);box-shadow:0 12px 40px rgba(59,130,246,0.1);}
 .p-card.featured{grid-column:span 2;}
 .p-card.featured:hover{border-color:rgba(245,158,11,0.3);}
-.p-video{background:#020810;}
+.p-video{background:#020810;position:relative;cursor:pointer;}
 .p-video video{width:100%;display:block;max-height:360px;object-fit:cover;}
 .p-card.featured .p-video video{max-height:460px;}
+.play-btn{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:68px;height:68px;border-radius:50%;
+  background:rgba(6,14,28,0.75);border:2px solid rgba(255,255,255,0.6);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;pointer-events:none;
+}
+.play-btn svg{width:28px;height:28px;fill:#FFFFFF;margin-left:4px;}
+.p-video:hover .play-btn{background:rgba(34,211,238,0.85);border-color:var(--cyan);}
+.p-video.playing .play-btn{display:none;}
 .p-body{padding:1.75rem;flex:1;display:flex;flex-direction:column;}
 .p-cat{
   font-size:0.8rem;font-weight:600;
@@ -359,7 +369,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
     <div class="s-rule"></div>
     <div class="projects-grid">
       <div class="p-card featured">
-        <div class="p-video"><video autoplay muted loop playsinline><source src="0523.mp4" type="video/mp4"></video></div>
+        <div class="p-video" onclick="toggleVideo(this)">
+          <video playsinline loop>
+            <source src="0523.mp4" type="video/mp4">
+          </video>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
         <div class="p-body">
           <div class="p-cat">Featured Project · Embedded AI</div>
           <div class="p-title">Embedded AI Currency Classifier , STM32 Neural Network Inference</div>
@@ -375,7 +392,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
         </div>
       </div>
       <div class="p-card featured">
-        <div class="p-video"><video autoplay muted loop playsinline><source src="ai_market_analysis.mp4" type="video/mp4"></video></div>
+        <div class="p-video" onclick="toggleVideo(this)">
+          <video playsinline loop>
+            <source src="ai_market_analysis.mp4" type="video/mp4">
+          </video>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
         <div class="p-body">
           <div class="p-cat">AI Automation · Data Pipelines</div>
           <div class="p-title">AI Market Intelligence System</div>
@@ -387,7 +411,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
         </div>
       </div>
       <div class="p-card">
-        <div class="p-video"><video autoplay muted loop playsinline><source src="0222.mp4" type="video/mp4"></video></div>
+        <div class="p-video" onclick="toggleVideo(this)">
+          <video playsinline loop>
+            <source src="0222.mp4" type="video/mp4">
+          </video>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
         <div class="p-body">
           <div class="p-cat">Edge AI · Privacy</div>
           <div class="p-title">Behavioral State Monitoring System</div>
@@ -398,7 +429,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
         </div>
       </div>
       <div class="p-card">
-        <div class="p-video"><video autoplay muted loop playsinline><source src="smart_image.mp4" type="video/mp4"></video></div>
+        <div class="p-video" onclick="toggleVideo(this)">
+          <video playsinline loop>
+            <source src="smart_image.mp4" type="video/mp4">
+          </video>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
         <div class="p-body">
           <div class="p-cat">AI Automation · Computer Vision</div>
           <div class="p-title">Smart Image Collector &amp; Analyser</div>
@@ -409,7 +447,14 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
         </div>
       </div>
       <div class="p-card">
-        <div class="p-video"><video autoplay muted loop playsinline><source src="linkedin_automation.mp4" type="video/mp4"></video></div>
+        <div class="p-video" onclick="toggleVideo(this)">
+          <video playsinline loop>
+            <source src="linkedin_automation.mp4" type="video/mp4">
+          </video>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
         <div class="p-body">
           <div class="p-cat">Automation</div>
           <div class="p-title">LinkedIn Activity Automation</div>
@@ -550,15 +595,50 @@ footer{background:var(--bg);border-top:1px solid var(--border);padding:2.5rem 3r
 </footer>
 
 <script>
-function sendMessage(e) {
+function toggleVideo(wrapper) {
+  const video = wrapper.querySelector('video');
+  if (video.paused) {
+    // Pause all other videos first
+    document.querySelectorAll('.p-video video').forEach(v => {
+      if (v !== video) { v.pause(); v.closest('.p-video').classList.remove('playing'); }
+    });
+    video.play();
+    wrapper.classList.add('playing');
+  } else {
+    video.pause();
+    wrapper.classList.remove('playing');
+  }
+}
+
+async function sendMessage(e) {
   e.preventDefault();
   const form = e.target;
-  const name = form.name.value;
-  const email = form.email.value;
-  const subject = form.subject.value || 'Portfolio Contact';
-  const message = form.message.value;
-  const body = `Name: ${name}\nEmail: ${email}\n\n${message}`;
-  window.location.href = `mailto:joellekhalil97@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const status = document.getElementById('form-status');
+  const btn = form.querySelector('.form-submit');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mdavwona', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name.value,
+        email: form.email.value,
+        subject: form.subject.value,
+        message: form.message.value
+      })
+    });
+    if (res.ok) {
+      status.textContent = 'Message sent. I will get back to you soon.';
+      status.className = 'form-status success';
+      form.reset();
+    } else { throw new Error(); }
+  } catch {
+    status.textContent = 'Something went wrong. Please email me directly at joellekhalil97@gmail.com';
+    status.className = 'form-status error';
+  }
+  btn.textContent = 'Send Message';
+  btn.disabled = false;
 }
 </script>
 </body>

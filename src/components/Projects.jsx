@@ -48,6 +48,15 @@ const projects = [
     stack: ['Windows Task Scheduler', 'Python'],
     video: '/linkedin_automation.mp4',
   },
+  {
+    featured: true,
+    cat: 'Automation',
+    title: 'DrowsinessGuard',
+    desc: 'A Garmin Connect IQ watch app for real-time drowsy driving detection, built entirely in Monkey C. Fuses accelerometer motion variance, heart rate variability, and GPS on-device to detect sustained driver stillness and escalate through staged alerts, with no phone dependency. Detection thresholds are calibrated against real recorded driving data rather than assumed defaults, validated at zero false alerts across 32 minutes of real driving with full stillness-test recall. Published to the Garmin Connect IQ Store (beta), with session data syncing to Garmin Connect and Strava as standard recorded activities.',
+    metrics: [],
+    stack: ['Monkey C'],
+    video: '/drowsinessguard.mp4',
+  },
 ]
 
 function ProjectCard({ project }) {
